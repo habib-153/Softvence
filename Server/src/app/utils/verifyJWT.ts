@@ -4,19 +4,11 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import AppError from '../errors/AppError';
 import { USER_ROLE, USER_STATUS } from '../modules/User/user.constant';
 
-// _id: user._id,
-//     name: user.name,
-//     email: user.email,
-//     mobileNumber: user.mobileNumber,
-//     role: user.role,
-//     status: user.status,
-
 export const createToken = (
   jwtPayload: {
     _id?: string;
     name: string;
     email: string;
-    mobileNumber?: string;
     role: keyof typeof USER_ROLE;
     status: keyof typeof USER_STATUS;
   },

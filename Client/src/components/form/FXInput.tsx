@@ -1,6 +1,8 @@
 "use client";
 
 import { Input } from "@nextui-org/input";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 interface IProps {
@@ -11,6 +13,7 @@ interface IProps {
   label: string;
   name: string;
   radius?: "sm" | "md" | "lg" | "none" | "full"
+  classNames?: any
 }
 
 export default function FXInput({
@@ -21,22 +24,51 @@ export default function FXInput({
   radius = "lg",
   label,
   name,
+  classNames
 }: IProps) {
   const {
     register,
     formState: { errors },
   } = useFormContext();
 
+  const [isVisible, setIsVisible] = useState(false);
+  const toggleVisibility = () => setIsVisible(!isVisible);
+
+  const isPasswordField = type === "password";
+
+
   return (
     <Input
       {...register(name)}
+      classNames={classNames}
+      endContent={
+        isPasswordField ? (
+          <button
+            className="focus:outline-none"
+            type="button"
+            onClick={toggleVisibility}
+          >
+            {isVisible ? (
+              <EyeOff
+                className="text-2xl text-default-400 pointer-events-none"
+                size={20}
+              />
+            ) : (
+              <Eye
+                className="text-2xl text-default-400 pointer-events-none"
+                size={20}
+              />
+            )}
+          </button>
+        ) : null
+      }
       errorMessage={errors?.[name] ? (errors?.[name]?.message as string) : ""}
       isInvalid={!!errors[name]}
       label={label}
       radius={radius}
       required={required}
       size={size}
-      type={type}
+      type={isPasswordField ? (isVisible ? "text" : "password") : type}
       variant={variant}
     />
   );

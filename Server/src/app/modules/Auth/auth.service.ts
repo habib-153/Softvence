@@ -4,7 +4,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../../config';
 import AppError from '../../errors/AppError';
 import { createToken } from '../../utils/verifyJWT';
-import { USER_ROLE } from '../User/user.constant';
+import { USER_ROLE, USER_STATUS } from '../User/user.constant';
 import { User } from '../User/user.model';
 import { TLoginUser, TRegisterUser } from './auth.interface';
 import { EmailHelper } from '../../utils/emailSender';
@@ -18,6 +18,7 @@ const registerUser = async (payload: TRegisterUser) => {
   }
 
   payload.role = USER_ROLE.USER;
+  payload.status = USER_STATUS.ACTIVE
 
   //create new user
   const newUser = await User.create(payload);
@@ -28,7 +29,6 @@ const registerUser = async (payload: TRegisterUser) => {
     _id: newUser._id,
     name: newUser.name,
     email: newUser.email,
-    mobileNumber: newUser.mobileNumber,
     role: newUser.role,
     status: newUser.status,
   };
@@ -69,7 +69,6 @@ const loginUser = async (payload: TLoginUser) => {
     _id: user._id,
     name: user.name,
     email: user.email,
-    mobileNumber: user.mobileNumber,
     role: user.role,
     status: user.status,
   };
@@ -158,7 +157,6 @@ const refreshToken = async (token: string) => {
     _id: user._id,
     name: user.name,
     email: user.email,
-    mobileNumber: user.mobileNumber,
     role: user.role,
     status: user.status,
   };
@@ -224,7 +222,6 @@ const forgetPassword = async (userEmail: string) => {
     _id: user._id,
     name: user.name,
     email: user.email,
-    mobileNumber: user.mobileNumber,
     role: user.role,
     status: user.status,
   };

@@ -16,12 +16,11 @@ module.exports = {
       colors: {
         // (Header, Navbar, Buttons)
         primary: "#60E5AE",
-        //Alerts, Warnings, Important Actions
         warning: "#DC2626",
         b_ground: "#009688",
-        //Background, Cards, Text Boxes
         secondary: "#60E5AE",
-
+        bg_secondary: "#193a36",
+        text_secondary: "#667085",
         white: "#FFFFFF",
       },
     },
