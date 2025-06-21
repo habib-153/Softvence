@@ -29,6 +29,8 @@ router.post(
 
 router.post('/reset-password', AuthControllers.resetPassword);
 
+router.post('/forgot-password', AuthControllers.forgotPassword);
+
 router.post(
   '/refresh-token',
   validateRequestCookies(AuthValidation.refreshTokenValidationSchema),

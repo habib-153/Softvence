@@ -7,6 +7,7 @@ import { createToken } from '../../utils/verifyJWT';
 import { USER_ROLE } from '../User/user.constant';
 import { User } from '../User/user.model';
 import { TLoginUser, TRegisterUser } from './auth.interface';
+import { EmailHelper } from '../../utils/emailSender';
 
 const registerUser = async (payload: TRegisterUser) => {
   // checking if the user is exist
@@ -212,10 +213,38 @@ const resetPassword = async (
   return null;
 };
 
+const forgetPassword = async (userEmail: string) => {
+  const user = await User.isUserExistsByEmail(userEmail);
+
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User does not exist!');
+  }
+
+  const jwtPayload = {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    mobileNumber: user.mobileNumber,
+    role: user.role,
+    status: user.status,
+  };
+
+  const resetToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    '20m'
+  );
+
+  const resetUILink = `${config.reset_pass_ui_link}?email=${user.email}&token=${resetToken} `;
+
+  await EmailHelper.sendEmail(user.email, resetUILink);
+};
+
 export const AuthServices = {
   registerUser,
   loginUser,
   changePassword,
   refreshToken,
   resetPassword,
+  forgetPassword,
 };
