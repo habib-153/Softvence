@@ -1,7 +1,7 @@
 "use client";
-import { Button } from "@nextui-org/button";
-import { Card, CardBody } from "@nextui-org/card";
-import { Spinner } from "@nextui-org/react";
+import { Button } from "@heroui/button";
+import { Card, CardBody } from "@heroui/card";
+import { Spinner } from "@heroui/react";
 import { ArrowLeft, Clock, Mail } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
