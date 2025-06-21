@@ -34,6 +34,7 @@ const ResetPassword = () => {
   }> = async (data) => {
     if (data.newPassword !== data.confirmPassword) {
       toast.error("Passwords do not match");
+
       return;
     }
 
@@ -56,12 +57,12 @@ const ResetPassword = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="h-40 bg-gradient-to-br from-emerald-600 via-emerald-700 to-black relative overflow-hidden">
+      <div className="h-40 bg-gradient-to-r from-[#60E5AE] via-black to-[#193a36] relative overflow-hidden">
         <div className="absolute inset-0 bg-black/20" />
         <img
           alt=""
+          className="w-80 absolute opacity-55 right-14 top-0 h-full object-cover"
           src={resetBg.src}
-          className="w-48 absolute right-14 top-0 h-full object-cover"
         />
         <div className="absolute top-4 right-4 opacity-30">
           <div className="flex space-x-2">
@@ -72,8 +73,8 @@ const ResetPassword = () => {
         </div>
       </div>
 
-      <div className="relative -mt-16 flex items-center justify-center px-4">
-        <Card className="w-full max-w-md bg-white shadow-xl rounded-2xl">
+      <div className="relative -mt-16 flex items-center justify-center px-4 sm:px-6 lg:px-16">
+        <Card className="w-full bg-white shadow-xl rounded-2xl">
           <CardBody className="p-8">
             {isSuccess ? (
               <div className="flex flex-col gap-4 items-center text-center">
@@ -89,7 +90,7 @@ const ResetPassword = () => {
                 </p>
                 <Button
                   as={Link}
-                  className="mt-4 w-full"
+                  className="mt-4"
                   color="primary"
                   href="/login"
                   size="lg"
@@ -99,7 +100,7 @@ const ResetPassword = () => {
                 </Button>
               </div>
             ) : (
-              <div className="space-y-6">
+              <div className="space-y-6 max-w-md mx-auto">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <Clock className="w-8 h-8 text-white" />

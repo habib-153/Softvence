@@ -15,14 +15,12 @@ module.exports = {
       },
       colors: {
         // (Header, Navbar, Buttons)
-        primary: "#1E3A8A",
+        primary: "#60E5AE",
         //Alerts, Warnings, Important Actions
         warning: "#DC2626",
         b_ground: "#009688",
         //Background, Cards, Text Boxes
-        secondary: "#F3F4F6",
-        //Verified Posts & Status Badges
-        verified: "#16A34A",
+        secondary: "#60E5AE",
 
         white: "#FFFFFF",
       },

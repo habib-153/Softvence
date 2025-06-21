@@ -1,5 +1,5 @@
 export const protectedRoutes = [
-  "/login",
+  "/",
   "/register",
   "/forgot-password",
   "/reset-password",
