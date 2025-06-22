@@ -33,6 +33,7 @@ const TaskDetailsPage = ({
   const [selectedStatus, setSelectedStatus] = useState(task?.status || "");
   const { mutate: updateTask, isPending: isUpdating } = useUpdateTask();
   const { mutate: deleteTask, isPending: isDeleting } = useDeleteTask();
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const {
     isOpen: isEditOpen,
@@ -133,7 +134,7 @@ const TaskDetailsPage = ({
 
     deleteTask(task._id as string, {
       onSuccess: () => {
-        onDeleteOpenChange();
+        setDeleteOpen(false);
         onBack();
       },
       onError: (error) => {
@@ -146,7 +147,7 @@ const TaskDetailsPage = ({
     onSuccessOpenChange();
     setTimeout(() => {
       onBack();
-    }, 100000);
+    }, 1000000);
   };
 
   return (
@@ -303,7 +304,7 @@ const TaskDetailsPage = ({
         isOpen={isDeleteOpen}
         taskTitle={task.title}
         onConfirm={handleDeleteTask}
-        onOpenChange={onDeleteOpenChange}
+        onOpenChange={setDeleteOpen}
       />
 
       <SuccessModal

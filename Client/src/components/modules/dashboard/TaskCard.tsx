@@ -98,7 +98,11 @@ const TaskCard = ({ task, onTaskClick }: TaskCardProps) => {
   const confirmDelete = () => {
     if (!task._id) return;
 
-    deleteTask(task._id);
+    deleteTask(task._id as string, {
+      onSuccess: () => {
+        onDeleteOpenChange();
+      },
+    });
   };
 
   const formatDate = (dateInput: string | Date) => {

@@ -53,7 +53,18 @@ const AddTaskModal = ({ isOpen, onOpenChange }: AddTaskModalProps) => {
         status: "pending" as const,
       };
 
-      createTask(taskData);
+      createTask(taskData, {
+        onSuccess: () => {
+          onOpenChange(false); 
+          if (formRef.current) {
+            formRef.current.reset();
+          }
+        },
+        onError: (error) => {
+          toast.error("Failed to create task. Please try again.");
+          console.error("Create task error:", error);
+        },
+      });
     } catch (error) {
       toast.error("Something went wrong!");
     }

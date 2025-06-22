@@ -68,7 +68,7 @@ const SpinWheel = ({ onNavigateToTask }: SpinWheelProps) => {
 
   return (
     <div className="flex justify-center items-center min-h-[600px] w-full">
-      <div className="w-full max-w-6xl flex gap-12">
+      <div className="w-full max-w-6xl flex flex-col md:flex-row gap-12">
         {/* Left Side - Spin Wheel */}
         <div className="flex-1 flex flex-col items-center justify-center">
           <div className="relative mb-8">

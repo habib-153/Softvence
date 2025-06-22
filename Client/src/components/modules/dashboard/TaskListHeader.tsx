@@ -19,9 +19,9 @@ const TaskListHeader = ({
 }: TaskListHeaderProps) => {
 
   return (
-    <div className="flex justify-between items-center bg-white rounded-t-lg p-6">
+    <div className="flex flex-col sm:flex-row justify-between items-center bg-white rounded-t-lg p-6">
       <h3 className="text-xl font-bold">All Task List</h3>
-      <div className="flex gap-3 items-center">
+      <div className="flex flex-wrap gap-3 items-center">
         <Select
           className="w-48"
           placeholder="Select Task Category"

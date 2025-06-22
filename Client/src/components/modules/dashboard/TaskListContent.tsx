@@ -35,7 +35,7 @@ const TaskListContent = ({
 
   return (
     <div className="space-y-6">
-      <Card className="relative -mt-16 z-20 shadow-lg">
+      <Card className="relative -mt-6 lg:-mt-16 z-20 shadow-lg">
         <TaskListHeader
           selectedCategory={selectedCategory}
           selectedStatus={selectedStatus}
