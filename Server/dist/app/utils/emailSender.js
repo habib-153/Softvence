@@ -139,12 +139,6 @@ const sendEmail = (email, resetLink) => __awaiter(void 0, void 0, void 0, functi
                                 </table>
                             </div>
                             
-                            <!-- Alternative Link -->
-                            <div style="background: #f9fafb; border-radius: 8px; padding: 20px; margin: 30px 0;">
-                                <p style="color: #374151; margin: 0 0 10px 0; font-size: 14px; font-weight: 500;">Can't click the button? Copy and paste this link:</p>
-                                <p style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 4px; padding: 12px; margin: 0; font-size: 12px; color: #6b7280; word-break: break-all; font-family: monospace;">${resetLink}</p>
-                            </div>
-                            
                             <!-- Security Tips -->
                             <div style="border-top: 1px solid #e5e7eb; padding-top: 30px; margin-top: 30px;">
                                 <h3 style="color: #374151; margin: 0 0 15px 0; font-size: 16px; font-weight: 600;">🔍 Didn't request this?</h3>

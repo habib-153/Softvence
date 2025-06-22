@@ -18,6 +18,7 @@ import {
   DropdownTrigger,
 } from "@heroui/dropdown";
 import { User } from "@heroui/user";
+import { toast } from "sonner";
 
 import { useUser } from "@/src/context/user.provider";
 import { logout } from "@/src/services/AuthService";
@@ -36,6 +37,7 @@ const DashboardHeader = ({ activeTab, onTabChange }: DashboardHeaderProps) => {
   const handleLogout = () => {
     logout();
     router.push("/");
+    toast.success("Logged out successfully.");
   };
 
   return (

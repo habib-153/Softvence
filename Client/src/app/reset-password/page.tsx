@@ -92,7 +92,7 @@ const ResetPassword = () => {
                   as={Link}
                   className="mt-4"
                   color="primary"
-                  href="/login"
+                  href="/"
                   size="lg"
                   startContent={<ArrowLeft size={16} />}
                 >
@@ -124,7 +124,7 @@ const ResetPassword = () => {
                         Email Address
                       </label>
                       <FXInput
-                        label="m3220@gmail.com"
+                        label="Enter your email"
                         name="email"
                         required={true}
                         type="email"
@@ -140,7 +140,7 @@ const ResetPassword = () => {
                         Enter New Password
                       </label>
                       <FXInput
-                        label="••••••••••••"
+                        label="Enter your new password"
                         name="newPassword"
                         required={true}
                         type="password"
