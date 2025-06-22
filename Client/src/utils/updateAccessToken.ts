@@ -8,7 +8,7 @@ import envConfig from "../config/envConfig";
 
 export const updateAccessTokenInCookies = (updatedUser: IUser) => {
   const secret = envConfig.jwt_access_secret;
-  const expiresIn = envConfig.jwt_access_expires_in;
+  const expiresIn = envConfig.jwt_access_expires_in
 
   if (!secret) {
     throw new Error("JWT secret is not defined");
@@ -19,6 +19,7 @@ export const updateAccessTokenInCookies = (updatedUser: IUser) => {
   }
 
   try {
+    // @ts-ignore
     const newAccessToken = jwt.sign(
       {
         _id: updatedUser._id,

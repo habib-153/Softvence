@@ -1,9 +1,10 @@
 "use client";
-import { categoryOptions } from "@/src/constant";
 import { Card, CardBody, Button, Select, SelectItem } from "@heroui/react";
 import { RotateCcw, ArrowRight } from "lucide-react";
 import { useState, useRef } from "react";
 import { toast } from "sonner";
+
+import { categoryOptions } from "@/src/constant";
 
 interface SpinWheelProps {
   onNavigateToTask?: (category: string) => void;

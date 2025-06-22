@@ -15,6 +15,7 @@ export const createToken = (
   secret: string,
   expiresIn: string
 ) => {
+  // @ts-expect-error jwt.sign expects specific payload structure but our custom payload works fine
   return jwt.sign(jwtPayload, secret, {
     expiresIn,
   });

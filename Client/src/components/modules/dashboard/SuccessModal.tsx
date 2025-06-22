@@ -1,5 +1,5 @@
 "use client";
-import { Modal, ModalContent, Button } from "@heroui/react";
+import { Modal, ModalContent } from "@heroui/react";
 import Image from "next/image";
 
 import doneImg from "@/src/assets/Group 38045.png";

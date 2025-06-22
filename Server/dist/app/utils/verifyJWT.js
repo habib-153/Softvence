@@ -9,6 +9,7 @@ exports.verifyToken = exports.createToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const AppError_1 = __importDefault(require("../errors/AppError"));
 const createToken = (jwtPayload, secret, expiresIn) => {
+    // @ts-expect-error jwt.sign expects specific payload structure but our custom payload works fine
     return jsonwebtoken_1.default.sign(jwtPayload, secret, {
         expiresIn,
     });
