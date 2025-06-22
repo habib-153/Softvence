@@ -13,12 +13,15 @@ export default function CTDatePicker({
   return (
     <Controller
       name={name}
-      render={({ field: { value, ...fields } }) => (
+      render={({ field: { value, onChange, ...fields } }) => (
         <DatePicker
           className="min-w-full sm:min-w-[225px]"
           label={label}
           variant={variant}
           {...fields}
+          onChange={(date) => {
+            onChange(date ? date.toString() : "");
+          }}
         />
       )}
     />

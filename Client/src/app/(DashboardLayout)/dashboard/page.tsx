@@ -6,37 +6,48 @@ import DashboardHeader from "@/src/components/modules/dashboard/DashboardHeader"
 import TaskListContent from "@/src/components/modules/dashboard/TaskListContent";
 import SpinWheelContent from "@/src/components/modules/dashboard/SpinWheelContent";
 import AddTaskModal from "@/src/components/modules/dashboard/AddTaskModal";
+import { useGetAllTasks } from "@/src/hooks/task.hook";
+import envConfig from "@/src/config/envConfig";
+import { TTask } from "@/src/types";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("tasklist");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [selectedTask, setSelectedTask] = useState<TTask | null>(null);
 
-  // Mock task data
-  const tasks = [
-    // {
-    //   id: 1,
-    //   title: "Art and Craft",
-    //   description:
-    //     "Create beautiful art that you could use for decoration. Learn about arts and arts.",
-    //   status: "pending",
-    //   priority: "high",
-    //   category: "arts-and-craft",
-    //   deadline: "Friday, April 6 - 2024",
-    //   progress: 0,
-    // },
-    // {
-    //   id: 2,
-    //   title: "Art and Craft",
-    //   description: "Create beautiful art that you could use for decoration.",
-    //   status: "ongoing",
-    //   priority: "medium",
-    //   category: "arts-and-craft",
-    //   deadline: "Friday, April 6 - 2024",
-    //   progress: 45,
-    // },
-  ];
+  const {
+    isOpen: isAddModalOpen,
+    onOpen: onAddModalOpen,
+    onOpenChange: onAddModalOpenChange,
+  } = useDisclosure();
+
+  const apiUrl = `${envConfig.baseApi}/tasks`;
+  const { data } = useGetAllTasks(apiUrl);
+  const tasks = data?.data || [];
+
+  const handleTaskClick = (task: TTask) => {
+    setSelectedTask(task);
+  };
+
+  const handleBackToList = () => {
+    setSelectedTask(null);
+  };
+
+  const handleEditTask = (task: TTask) => {
+    // You can open edit modal here or navigate to edit page
+    console.log("Edit task:", task);
+  };
+
+  const handleDeleteTask = (task: TTask) => {
+    // Handle delete confirmation
+    console.log("Delete task:", task);
+  };
+
+  const handleStartTask = (task: TTask) => {
+    // Handle start task logic
+    console.log("Start task:", task);
+  };
 
   return (
     <>
@@ -47,16 +58,25 @@ const Dashboard = () => {
           <TaskListContent
             selectedCategory={selectedCategory}
             selectedStatus={selectedStatus}
+            selectedTask={selectedTask}
             tasks={tasks}
-            onAddTask={onOpen}
+            onAddTask={onAddModalOpen}
+            onBackToList={handleBackToList}
             onCategoryChange={setSelectedCategory}
+            onDeleteTask={handleDeleteTask}
+            onEditTask={handleEditTask}
+            onStartTask={handleStartTask}
             onStatusChange={setSelectedStatus}
+            onTaskClick={handleTaskClick}
           />
         )}
 
         {activeTab === "spin" && <SpinWheelContent />}
 
-        <AddTaskModal isOpen={isOpen} onOpenChange={onOpenChange} />
+        <AddTaskModal
+          isOpen={isAddModalOpen}
+          onOpenChange={onAddModalOpenChange}
+        />
       </main>
     </>
   );

@@ -41,7 +41,7 @@ export const getSingleTask = async (id: string) => {
 
 export const updateTask = async (id: string, data: TTask) => {
   try {
-    const response = await axiosInstance.patch(`/tasks/${id}`, data);
+    const response = await axiosInstance.put(`/tasks/${id}`, data);
 
     revalidateTag("tasks");
 

@@ -24,6 +24,7 @@ export type TTaskCategory =
     category: TTaskCategory;
     createdAt?: Date;
     updatedAt?: Date;
+    points?: number;
   };
 
 export interface IInput {
@@ -44,7 +45,6 @@ export interface IUser {
   password: string;
   status: string;
   passwordChangedAt?: Date;
-  mobileNumber?: string;
   profilePhoto?: string;
   createdAt?: Date;
   updatedAt?: Date;

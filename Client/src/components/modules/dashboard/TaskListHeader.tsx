@@ -1,5 +1,6 @@
 import { Button, Select, SelectItem } from "@heroui/react";
-import { Plus } from "lucide-react";
+
+import { categories, statusOptions } from "@/src/constant";
 
 interface TaskListHeaderProps {
   selectedCategory: string;
@@ -16,22 +17,6 @@ const TaskListHeader = ({
   onStatusChange,
   onAddTask,
 }: TaskListHeaderProps) => {
-  const categories = [
-    { key: "all", label: "All Categories" },
-    { key: "arts-and-craft", label: "Arts and Craft" },
-    { key: "nature", label: "Nature" },
-    { key: "family", label: "Family" },
-    { key: "sport", label: "Sport" },
-    { key: "meditation", label: "Meditation" },
-    { key: "friends", label: "Friends" },
-  ];
-
-  const statusOptions = [
-    { key: "all", label: "All Status" },
-    { key: "pending", label: "Pending" },
-    { key: "ongoing", label: "Ongoing" },
-    { key: "done", label: "Done" },
-  ];
 
   return (
     <div className="flex justify-between items-center bg-white rounded-t-lg p-6">
@@ -67,7 +52,32 @@ const TaskListHeader = ({
 
         <Button
           color="primary"
-          startContent={<Plus size={16} />}
+          startContent={
+            <svg
+              fill="none"
+              height="20"
+              viewBox="0 0 18 20"
+              width="18"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11.236 0.761963H4.584C2.525 0.761963 0.75 2.43096 0.75 4.49096V15.34C0.75 17.516 2.408 19.115 4.584 19.115H12.572C14.632 19.115 16.302 17.4 16.302 15.34V6.03796L11.236 0.761963Z"
+                stroke="#1F1F1F"
+              />
+              <path
+                d="M10.9766 0.750244V3.65924C10.9766 5.07924 12.1256 6.23124 13.5456 6.23424C14.8616 6.23724 16.2086 6.23824 16.2996 6.23224"
+                stroke="#1F1F1F"
+              />
+              <path
+                d="M10.7994 10.9141H5.89844"
+                stroke="#1F1F1F"
+              />
+              <path
+                d="M8.34375 13.3654V8.46436"
+                stroke="#1F1F1F"
+              />
+            </svg>
+          }
           onPress={onAddTask}
         >
           Add New Task

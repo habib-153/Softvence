@@ -6,8 +6,9 @@ const taskSchema = new Schema<TTask>(
     title: { type: String, required: true },
     description: { type: String, required: true },
     status: { type: String },
+    points: { type: Number},
     deadline: { type: Date, required: true },
-    priority: { type: String, required: true },
+    priority: { type: String },
     category: { type: String, required: true },
   },
   {

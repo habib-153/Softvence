@@ -9,7 +9,8 @@ export const CATEGORIES = [
   'sport',
   'meditation',
   'friends',
+  'other'
 ];
-export type TCategory = 'arts-and-craft' | 'nature' | 'family' | 'sport' | 'meditation' | 'friends';
+export type TCategory = 'arts-and-craft' | 'nature' | 'family' | 'sport' | 'meditation' | 'friends'| 'other';
 
 export const postSearchableFields = ['title', 'category'];

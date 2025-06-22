@@ -10,6 +10,8 @@ const createTaskValidationSchema = z.object({
       .string()
       .datetime({ message: 'Invalid deadline format' })
       .or(z.date()),
+    points: z
+      .number({ required_error: 'Points are required' }),
     category: z.string({ required_error: 'Category is required' }),
   }),
 });
@@ -22,6 +24,9 @@ const updateTaskValidationSchema = z.object({
       .optional(),
     status: z.string().optional(),
     priority: z.string().optional(),
+    points: z
+      .number({ required_error: 'Points are required' })
+      .optional(),
     deadline: z
       .string()
       .datetime({ message: 'Invalid deadline format' })

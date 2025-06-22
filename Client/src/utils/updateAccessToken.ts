@@ -25,7 +25,6 @@ export const updateAccessTokenInCookies = (updatedUser: IUser) => {
         name: updatedUser.name,
         email: updatedUser.email,
         role: updatedUser.role,
-        mobileNumber: updatedUser.mobileNumber,
         status: updatedUser.status,
       },
       secret,

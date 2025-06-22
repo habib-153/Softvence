@@ -7,6 +7,7 @@ export type TTask = {
   description: string;
   status?: TStatus;
   priority: string;
+  points: number;
   deadline: Date;
   category: TCategory;
   createdAt?: Date;
