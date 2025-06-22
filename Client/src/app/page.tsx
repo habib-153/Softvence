@@ -116,7 +116,7 @@ const LoginPage = () => {
                   Password
                 </label>
                 <FXInput
-                  label="••••••••••••"
+                  label="Password"
                   name="password"
                   type="password"
                   variant="bordered"
