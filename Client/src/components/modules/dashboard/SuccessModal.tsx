@@ -19,18 +19,6 @@ const SuccessModal = ({
     <Modal className="max-w-md" isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalContent className="p-6">
         <div className="flex flex-col items-center text-center space-y-4">
-          {/* Close Button */}
-          <div className="w-full flex justify-end">
-            <Button
-              isIconOnly
-              className="text-gray-400"
-              variant="light"
-              onPress={() => onOpenChange(false)}
-            >
-              ✕
-            </Button>
-          </div>
-
           
             <div className="w-32 h-32 relative z-10">
               <Image

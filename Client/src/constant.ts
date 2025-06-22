@@ -32,7 +32,6 @@ export const statusOptions = [
 ];
 
 export const status = [
-  { key: "all", label: "All Status" },
   { key: "pending", label: "Pending" },
   { key: "ongoing", label: "Ongoing" },
   { key: "done", label: "Done" },

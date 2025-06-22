@@ -2,8 +2,6 @@
 import { useState, useMemo } from "react";
 import { useDisclosure } from "@heroui/react";
 
-import Loading from "../../loading";
-
 import DashboardHeader from "@/src/components/modules/dashboard/DashboardHeader";
 import TaskListContent from "@/src/components/modules/dashboard/TaskListContent";
 import SpinWheelContent from "@/src/components/modules/dashboard/SpinWheelContent";
@@ -25,7 +23,7 @@ const Dashboard = () => {
   } = useDisclosure();
 
   const apiUrl = `${envConfig.baseApi}/tasks`;
-  const { data, isLoading } = useGetAllTasks(apiUrl);
+  const { data } = useGetAllTasks(apiUrl);
   const allTasks = data?.data || [];
 
   // Filter tasks based on category and status
@@ -40,13 +38,17 @@ const Dashboard = () => {
     });
   }, [allTasks, selectedCategory, selectedStatus]);
 
-  if (isLoading) return <Loading />;
   const handleTaskClick = (task: TTask) => {
     setSelectedTask(task);
   };
 
   const handleBackToList = () => {
     setSelectedTask(null);
+  };
+
+  const handleSpinWheelNavigation = (category: string) => {
+    setSelectedCategory(category);
+    setActiveTab("tasklist");
   };
 
   return (
@@ -68,7 +70,9 @@ const Dashboard = () => {
           />
         )}
 
-        {activeTab === "spin" && <SpinWheelContent />}
+        {activeTab === "spin" && (
+          <SpinWheelContent onNavigateToTask={handleSpinWheelNavigation} />
+        )}
 
         <AddTaskModal
           isOpen={isAddModalOpen}
