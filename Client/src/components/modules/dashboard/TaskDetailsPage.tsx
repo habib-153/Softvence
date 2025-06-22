@@ -6,31 +6,51 @@ import {
   Chip,
   Select,
   SelectItem,
+  useDisclosure,
 } from "@heroui/react";
 import { Calendar, Edit2, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { getCategoryIcon } from "./TaskCard";
+import EditTaskModal from "./EditTaskModal";
+import DeleteConfirmModal from "./DeleteConfirmModal";
+import SuccessModal from "./SuccessModal";
 
 import { useUpdateTask, useDeleteTask } from "@/src/hooks/task.hook";
 import { TTask } from "@/src/types";
-import { statusOptions } from "@/src/constant";
+import { status } from "@/src/constant";
 
 interface TaskDetailsPageProps {
   task: TTask;
   onBack: () => void;
-  onEditTask?: (task: TTask) => void;
 }
 
 const TaskDetailsPage = ({
   task,
   onBack,
-  onEditTask,
 }: TaskDetailsPageProps) => {
   const [selectedStatus, setSelectedStatus] = useState(task?.status || "");
   const { mutate: updateTask, isPending: isUpdating } = useUpdateTask();
   const { mutate: deleteTask, isPending: isDeleting } = useDeleteTask();
+
+  const {
+    isOpen: isEditOpen,
+    onOpen: onEditOpen,
+    onOpenChange: onEditOpenChange,
+  } = useDisclosure();
+
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onOpenChange: onDeleteOpenChange,
+  } = useDisclosure();
+
+  const {
+    isOpen: isSuccessOpen,
+    onOpen: onSuccessOpen,
+    onOpenChange: onSuccessOpenChange,
+  } = useDisclosure();
 
   const getPriorityColor = (priority: string) => {
     switch (priority?.toLowerCase()) {
@@ -85,8 +105,22 @@ const TaskDetailsPage = ({
       status: selectedStatus as any,
     };
 
+    const isMarkingAsDone = selectedStatus === "done";
+
     updateTask(
-      { id: taskId, data: updateData }
+      { id: taskId, data: updateData },
+      {
+        onSuccess: () => {
+          if (isMarkingAsDone) {
+            onSuccessOpen();
+          } else {
+            toast.success("Task updated successfully");
+          }
+        },
+        onError: (error) => {
+          toast.error(error.message || "Failed to update task");
+        },
+      }
     );
   };
 
@@ -97,19 +131,27 @@ const TaskDetailsPage = ({
 
     if (!taskId) return;
 
-    deleteTask(taskId);
+    deleteTask(task._id as string, {
+      onSuccess: () => {
+        onDeleteOpenChange();
+        onBack();
+      },
+      onError: (error) => {
+        toast.error(error.message || "Failed to delete task");
+      },
+    });
   };
 
-  const handleEditTask = () => {
-    if (task && onEditTask) {
-      onEditTask(task);
-    }
+  const handleSuccessModalClose = () => {
+    onSuccessOpenChange();
+    setTimeout(() => {
+      onBack();
+    }, 100000);
   };
 
   return (
     <div className="space-y-6">
       <Card className="relative -mt-8 z-20 shadow-lg">
-        {/* Header */}
         <div className="flex justify-between items-center bg-white rounded-t-lg p-6 border-b">
           <h2 className="text-xl font-bold">Task Details</h2>
           {task.points && (
@@ -125,11 +167,15 @@ const TaskDetailsPage = ({
               className="bg-[rgba(255,170,0,0.1)] rounded-lg px-8 text-[#FFAB00]"
               startContent={<Edit2 size={16} />}
               variant="light"
-              onPress={handleEditTask}
+              onPress={onEditOpen}
             >
               Edit Task
             </Button>
-            <Button className="bg-primary rounded-lg px-6" color="primary" onPress={onBack}>
+            <Button
+              className="bg-primary rounded-lg px-6"
+              color="primary"
+              onPress={onBack}
+            >
               Back
             </Button>
           </div>
@@ -211,7 +257,7 @@ const TaskDetailsPage = ({
                       setSelectedStatus(Array.from(keys)[0] as string)
                     }
                   >
-                    {statusOptions.map((status) => (
+                    {status.map((status) => (
                       <SelectItem key={status.key}>{status.label}</SelectItem>
                     ))}
                   </Select>
@@ -228,7 +274,7 @@ const TaskDetailsPage = ({
                 size="lg"
                 startContent={<Trash2 size={16} />}
                 variant="solid"
-                onPress={handleDeleteTask}
+                onPress={onDeleteOpen}
               >
                 Delete Task
               </Button>
@@ -246,6 +292,25 @@ const TaskDetailsPage = ({
           </div>
         </CardBody>
       </Card>
+      <EditTaskModal
+        isOpen={isEditOpen}
+        task={task}
+        onOpenChange={onEditOpenChange}
+      />
+
+      <DeleteConfirmModal
+        isLoading={isDeleting}
+        isOpen={isDeleteOpen}
+        taskTitle={task.title}
+        onConfirm={handleDeleteTask}
+        onOpenChange={onDeleteOpenChange}
+      />
+
+      <SuccessModal
+        isOpen={isSuccessOpen}
+        points={task.points}
+        onOpenChange={handleSuccessModalClose}
+      />
     </div>
   );
 };

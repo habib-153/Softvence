@@ -1,8 +1,18 @@
 "use client";
-import { Card, CardBody, CardHeader, Chip, Button } from "@heroui/react";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Chip,
+  Button,
+  useDisclosure,
+} from "@heroui/react";
 import { Trash2 } from "lucide-react";
 
+import DeleteConfirmModal from "./DeleteConfirmModal";
+
 import { TTask } from "@/src/types";
+import { useDeleteTask } from "@/src/hooks/task.hook";
 
 export const getCategoryIcon = (category: string) => {
   switch (category) {
@@ -51,7 +61,14 @@ interface TaskCardProps {
   onDeleteClick?: (task: TTask) => void;
 }
 
-const TaskCard = ({ task, onTaskClick, onDeleteClick }: TaskCardProps) => {
+const TaskCard = ({ task, onTaskClick }: TaskCardProps) => {
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onOpenChange: onDeleteOpenChange,
+  } = useDisclosure();
+  const { mutate: deleteTask, isPending: isDeleting } = useDeleteTask();
+
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case "pending":
@@ -73,10 +90,15 @@ const TaskCard = ({ task, onTaskClick, onDeleteClick }: TaskCardProps) => {
     }
   };
 
-  const handleDeleteClick = () => {
-    if (onDeleteClick) {
-      onDeleteClick(task);
-    }
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onDeleteOpen();
+  };
+
+  const confirmDelete = () => {
+    if (!task._id) return;
+
+    deleteTask(task._id);
   };
 
   const formatDate = (dateInput: string | Date) => {
@@ -95,127 +117,136 @@ const TaskCard = ({ task, onTaskClick, onDeleteClick }: TaskCardProps) => {
   };
 
   return (
-    <Card
-      isPressable
-      className="h-full cursor-pointer hover:shadow-lg transition-shadow duration-200"
-      onPress={handleCardClick}
-    >
-      <CardHeader className="flex items-start gap-4 pb-2">
-        <div className="flex-shrink-0">{getCategoryIcon(task.category)}</div>
-        <div className="space-y-2">
-          <div className="flex justify-between items-center w-full">
-            <h4 className="font-semibold text-lg">{task.title}</h4>
-            <Button
-              isIconOnly
-              className="text-red-500 hover:bg-red-50"
-              color="danger"
+    <>
+      <Card
+        isPressable
+        className="h-full cursor-pointer hover:shadow-lg transition-shadow duration-200"
+        onPress={handleCardClick}
+      >
+        <CardHeader className="flex items-start gap-4 pb-2">
+          <div className="flex-shrink-0">{getCategoryIcon(task.category)}</div>
+          <div className="space-y-2">
+            <div className="flex justify-between items-center w-full">
+              <h4 className="font-semibold text-lg">{task.title}</h4>
+              <Button
+                isIconOnly
+                className="text-red-500 hover:bg-red-50"
+                color="danger"
+                size="sm"
+                variant="light"
+                onClick={handleDeleteClick}
+              >
+                <Trash2 size={16} />
+              </Button>
+            </div>
+            <div className="text-gray-600 text-start text-sm mb-4 line-clamp-2">
+              {task.description}
+            </div>
+          </div>
+        </CardHeader>
+
+        <CardBody className="pt-0">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <svg
+                fill="none"
+                height="24"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8 2V5"
+                  stroke="#1F1F1F"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeMiterlimit="10"
+                  strokeWidth="1.5"
+                />
+                <path
+                  d="M16 2V5"
+                  stroke="#1F1F1F"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeMiterlimit="10"
+                  strokeWidth="1.5"
+                />
+                <path
+                  d="M3.5 9.08997H20.5"
+                  stroke="#1F1F1F"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeMiterlimit="10"
+                  strokeWidth="1.5"
+                />
+                <path
+                  d="M19.211 15.77L15.671 19.31C15.531 19.45 15.401 19.71 15.371 19.9L15.181 21.25C15.111 21.74 15.451 22.0801 15.941 22.0101L17.291 21.82C17.481 21.79 17.751 21.66 17.881 21.52L21.421 17.9801C22.031 17.3701 22.321 16.6601 21.421 15.7601C20.531 14.8701 19.821 15.16 19.211 15.77Z"
+                  stroke="#1F1F1F"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeMiterlimit="10"
+                  strokeWidth="1.5"
+                />
+                <path
+                  d="M18.7031 16.28C19.0031 17.36 19.8431 18.2 20.9231 18.5"
+                  stroke="#1F1F1F"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeMiterlimit="10"
+                  strokeWidth="1.5"
+                />
+                <path
+                  d="M12 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5V12"
+                  stroke="#1F1F1F"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeMiterlimit="10"
+                  strokeWidth="1.5"
+                />
+                <path
+                  d="M11.9945 13.7H12.0035"
+                  stroke="#1F1F1F"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                />
+                <path
+                  d="M8.29138 13.7H8.30036"
+                  stroke="#1F1F1F"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                />
+                <path
+                  d="M8.29138 16.7H8.30036"
+                  stroke="#1F1F1F"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                />
+              </svg>
+              <span>{formatDate(task.deadline)}</span>
+            </div>
+
+            <Chip
+              className="capitalize"
+              color={getStatusColor(task.status as string)}
               size="sm"
-              variant="light"
-              onPress={handleDeleteClick}
+              variant="flat"
             >
-              <Trash2 size={16} />
-            </Button>
+              {task.status === "ongoing" ? "InProgress" : task.status}
+            </Chip>
           </div>
-          <div className="text-gray-600 text-start text-sm mb-4 line-clamp-2">
-            {task.description}
-          </div>
-        </div>
-      </CardHeader>
-
-      <CardBody className="pt-0">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <svg
-              fill="none"
-              height="24"
-              viewBox="0 0 24 24"
-              width="24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8 2V5"
-                stroke="#1F1F1F"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeMiterlimit="10"
-                strokeWidth="1.5"
-              />
-              <path
-                d="M16 2V5"
-                stroke="#1F1F1F"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeMiterlimit="10"
-                strokeWidth="1.5"
-              />
-              <path
-                d="M3.5 9.08997H20.5"
-                stroke="#1F1F1F"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeMiterlimit="10"
-                strokeWidth="1.5"
-              />
-              <path
-                d="M19.211 15.77L15.671 19.31C15.531 19.45 15.401 19.71 15.371 19.9L15.181 21.25C15.111 21.74 15.451 22.0801 15.941 22.0101L17.291 21.82C17.481 21.79 17.751 21.66 17.881 21.52L21.421 17.9801C22.031 17.3701 22.321 16.6601 21.421 15.7601C20.531 14.8701 19.821 15.16 19.211 15.77Z"
-                stroke="#1F1F1F"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeMiterlimit="10"
-                strokeWidth="1.5"
-              />
-              <path
-                d="M18.7031 16.28C19.0031 17.36 19.8431 18.2 20.9231 18.5"
-                stroke="#1F1F1F"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeMiterlimit="10"
-                strokeWidth="1.5"
-              />
-              <path
-                d="M12 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5V12"
-                stroke="#1F1F1F"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeMiterlimit="10"
-                strokeWidth="1.5"
-              />
-              <path
-                d="M11.9945 13.7H12.0035"
-                stroke="#1F1F1F"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-              />
-              <path
-                d="M8.29138 13.7H8.30036"
-                stroke="#1F1F1F"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-              />
-              <path
-                d="M8.29138 16.7H8.30036"
-                stroke="#1F1F1F"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-              />
-            </svg>
-            <span>{formatDate(task.deadline)}</span>
-          </div>
-
-          <Chip
-            className="capitalize"
-            color={getStatusColor(task.status as string)}
-            size="sm"
-            variant="flat"
-          >
-            {task.status === "ongoing" ? "InProgress" : task.status}
-          </Chip>
-        </div>
-      </CardBody>
-    </Card>
+        </CardBody>
+      </Card>
+      <DeleteConfirmModal
+        isLoading={isDeleting}
+        isOpen={isDeleteOpen}
+        taskTitle={task.title}
+        onConfirm={confirmDelete}
+        onOpenChange={onDeleteOpenChange}
+      />
+    </>
   );
 };
 

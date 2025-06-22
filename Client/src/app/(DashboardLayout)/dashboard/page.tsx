@@ -1,6 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useDisclosure } from "@heroui/react";
+
+import Loading from "../../loading";
 
 import DashboardHeader from "@/src/components/modules/dashboard/DashboardHeader";
 import TaskListContent from "@/src/components/modules/dashboard/TaskListContent";
@@ -23,30 +25,28 @@ const Dashboard = () => {
   } = useDisclosure();
 
   const apiUrl = `${envConfig.baseApi}/tasks`;
-  const { data } = useGetAllTasks(apiUrl);
-  const tasks = data?.data || [];
+  const { data, isLoading } = useGetAllTasks(apiUrl);
+  const allTasks = data?.data || [];
 
+  // Filter tasks based on category and status
+  const filteredTasks = useMemo(() => {
+    return allTasks.filter((task: TTask) => {
+      const categoryMatch =
+        selectedCategory === "all" || task.category === selectedCategory;
+      const statusMatch =
+        selectedStatus === "all" || task.status === selectedStatus;
+
+      return categoryMatch && statusMatch;
+    });
+  }, [allTasks, selectedCategory, selectedStatus]);
+
+  if (isLoading) return <Loading />;
   const handleTaskClick = (task: TTask) => {
     setSelectedTask(task);
   };
 
   const handleBackToList = () => {
     setSelectedTask(null);
-  };
-
-  const handleEditTask = (task: TTask) => {
-    // You can open edit modal here or navigate to edit page
-    console.log("Edit task:", task);
-  };
-
-  const handleDeleteTask = (task: TTask) => {
-    // Handle delete confirmation
-    console.log("Delete task:", task);
-  };
-
-  const handleStartTask = (task: TTask) => {
-    // Handle start task logic
-    console.log("Start task:", task);
   };
 
   return (
@@ -59,13 +59,10 @@ const Dashboard = () => {
             selectedCategory={selectedCategory}
             selectedStatus={selectedStatus}
             selectedTask={selectedTask}
-            tasks={tasks}
+            tasks={filteredTasks}
             onAddTask={onAddModalOpen}
             onBackToList={handleBackToList}
             onCategoryChange={setSelectedCategory}
-            onDeleteTask={handleDeleteTask}
-            onEditTask={handleEditTask}
-            onStartTask={handleStartTask}
             onStatusChange={setSelectedStatus}
             onTaskClick={handleTaskClick}
           />

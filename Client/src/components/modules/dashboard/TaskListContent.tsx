@@ -14,10 +14,6 @@ interface TaskListContentProps {
   onStatusChange: (status: string) => void;
   onAddTask: () => void;
   onTaskClick?: (task: TTask) => void;
-  onEditTask?: (task: TTask) => void;
-  onDeleteTask?: (task: TTask) => void;
-  onStartTask?: (task: TTask) => void;
-  // New props for task details view
   selectedTask?: TTask | null;
   onBackToList?: () => void;
 }
@@ -30,20 +26,11 @@ const TaskListContent = ({
   onStatusChange,
   onAddTask,
   onTaskClick,
-  onEditTask,
-  onDeleteTask,
-  onStartTask,
   selectedTask,
   onBackToList,
 }: TaskListContentProps) => {
   if (selectedTask && onBackToList) {
-    return (
-      <TaskDetailsPage
-        task={selectedTask}
-        onBack={onBackToList}
-        onEditTask={onEditTask}
-      />
-    );
+    return <TaskDetailsPage task={selectedTask} onBack={onBackToList} />;
   }
 
   return (
@@ -57,13 +44,7 @@ const TaskListContent = ({
           onStatusChange={onStatusChange}
         />
         <CardBody>
-          <TaskGrid
-            tasks={tasks}
-            onDeleteTask={onDeleteTask}
-            onEditTask={onEditTask}
-            onStartTask={onStartTask}
-            onTaskClick={onTaskClick}
-          />
+          <TaskGrid tasks={tasks} onTaskClick={onTaskClick} />
         </CardBody>
       </Card>
     </div>

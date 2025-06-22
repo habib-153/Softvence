@@ -1,6 +1,6 @@
 import { Button, Select, SelectItem } from "@heroui/react";
 
-import { categories, statusOptions } from "@/src/constant";
+import { categoryOptions, statusOptions } from "@/src/constant";
 
 interface TaskListHeaderProps {
   selectedCategory: string;
@@ -31,7 +31,7 @@ const TaskListHeader = ({
             onCategoryChange(Array.from(keys)[0] as string)
           }
         >
-          {categories.map((category) => (
+          {categoryOptions.map((category) => (
             <SelectItem key={category.key}>{category.label}</SelectItem>
           ))}
         </Select>

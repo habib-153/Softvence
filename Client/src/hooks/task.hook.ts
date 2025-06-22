@@ -26,9 +26,6 @@ export const useUpdateTask = () => {
   return useMutation<any, Error, { id: string; data: TTask }>({
     mutationKey: ["UPDATE_TASK"],
     mutationFn: async ({ id, data }) => await updateTask(id, data),
-    onSuccess: () => {
-      toast.success("Task updated successfully");
-    },
     onError: (error) => {
       toast.error(error.message);
     },

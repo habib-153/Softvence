@@ -30,3 +30,22 @@ export const statusOptions = [
   { key: "done", label: "Done" },
   { key: "collaborative-task", label: "Collaborative Task" },
 ];
+
+export const status = [
+  { key: "all", label: "All Status" },
+  { key: "pending", label: "Pending" },
+  { key: "ongoing", label: "Ongoing" },
+  { key: "done", label: "Done" },
+  { key: "collaborative-task", label: "Collaborative Task" },
+];
+
+
+export const categoryOptions = [
+  { key: "all", label: "ALL Categories" },
+  { key: "arts-and-craft", label: "Arts And Craft" },
+  { key: "nature", label: "Nature", },
+  { key: "family", label: "Family" },
+  { key: "sport", label: "Sport"},
+  { key: "meditation", label: "Meditation" },
+  { key: "friends", label: "Friends" },
+];
