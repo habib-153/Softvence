@@ -13,7 +13,7 @@ const SpinWheelContent = ({ onNavigateToTask }: SpinWheelContentProps) => {
         <CardHeader className="bg-white rounded-t-lg p-6 border-b">
           <h3 className="text-xl font-bold">Spin Wheel</h3>
         </CardHeader>
-        <CardBody className="p-8">
+        <CardBody className="">
           <SpinWheel onNavigateToTask={onNavigateToTask} />
         </CardBody>
       </Card>

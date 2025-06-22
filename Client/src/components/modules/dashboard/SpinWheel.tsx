@@ -1,4 +1,5 @@
 "use client";
+import { categoryOptions } from "@/src/constant";
 import { Card, CardBody, Button, Select, SelectItem } from "@heroui/react";
 import { RotateCcw, ArrowRight } from "lucide-react";
 import { useState, useRef } from "react";
@@ -46,8 +47,8 @@ const SpinWheel = ({ onNavigateToTask }: SpinWheelProps) => {
 
     setCurrentRotation(finalRotation);
 
-    // Calculate which segment we land on
-    const normalizedAngle = (360 - (finalRotation % 360)) % 360;
+    // Calculate which segment we land on (adjusted for bottom pointer)
+    const normalizedAngle = (360 - ((finalRotation + 180) % 360)) % 360;
     const segmentIndex = Math.floor(normalizedAngle / segmentAngle);
     const selectedTask = filteredCategories[segmentIndex];
 
@@ -65,20 +66,18 @@ const SpinWheel = ({ onNavigateToTask }: SpinWheelProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[500px] gap-8">
-      {/* Main Content - Spin Wheel and Category Selection */}
-      <div className="flex flex-col lg:flex-row gap-12 items-center justify-center w-full max-w-6xl">
-        {/* Spin Wheel Section */}
-        <div className="flex flex-col items-center flex-1">
+    <div className="flex justify-center items-center min-h-[600px] w-full">
+      <div className="w-full max-w-6xl flex gap-12">
+        {/* Left Side - Spin Wheel */}
+        <div className="flex-1 flex flex-col items-center justify-center">
           <div className="relative mb-8">
-            {/* Custom SVG Pointer */}
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-6 z-30">
+            {/* Custom SVG Pointer - Bottom */}
+            <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 translate-y-4 z-30">
               <svg
-                className="drop-shadow-lg"
                 fill="none"
-                height="42"
+                height="80"
                 viewBox="0 0 143 134"
-                width="45"
+                width="80"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <g filter="url(#filter0_d_17929_6556)">
@@ -127,11 +126,11 @@ const SpinWheel = ({ onNavigateToTask }: SpinWheelProps) => {
               </svg>
             </div>
 
-            {/* Wheel Container with border */}
+            {/* Wheel Container - Made Bigger */}
             <div className="relative">
               <div
                 ref={wheelRef}
-                className="relative w-80 h-80 rounded-full transition-transform duration-[3000ms] ease-out shadow-2xl"
+                className="relative w-96 h-96 rounded-full transition-transform duration-[3000ms] ease-out shadow-2xl"
                 style={{
                   transform: `rotate(${currentRotation}deg)`,
                   background: "#DC2626", // Red border
@@ -174,12 +173,13 @@ const SpinWheel = ({ onNavigateToTask }: SpinWheelProps) => {
                         "Z",
                       ].join(" ");
 
-                      // Text position
                       const textAngle = startAngle + segmentAngle / 2;
                       const textRad = (textAngle - 90) * (Math.PI / 180);
-                      const textRadius = 55;
+                      const textRadius = 50
                       const textX = centerX + textRadius * Math.cos(textRad);
                       const textY = centerY + textRadius * Math.sin(textRad);
+
+                      const textRotation = textAngle + 90; 
 
                       return (
                         <g key={category.key}>
@@ -187,15 +187,15 @@ const SpinWheel = ({ onNavigateToTask }: SpinWheelProps) => {
                             d={pathData}
                             fill={category.color}
                             stroke="#fff"
-                            strokeWidth="2"
+                            strokeWidth="1"
                           />
                           <text
                             dominantBaseline="middle"
-                            fill="white"
-                            fontSize="11"
+                            fill="black"
+                            fontSize="8"
                             fontWeight="bold"
                             textAnchor="middle"
-                            transform={`rotate(${textAngle}, ${textX}, ${textY})`}
+                            transform={`rotate(${textRotation}, ${textX}, ${textY})`}
                             x={textX}
                             y={textY}
                           >
@@ -207,14 +207,14 @@ const SpinWheel = ({ onNavigateToTask }: SpinWheelProps) => {
                   </svg>
 
                   {/* Center Circle */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full border-3 border-gray-200 flex items-center justify-center z-10 shadow-md">
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full border-2 border-gray-200 flex items-center justify-center z-10 shadow-md">
                     <div className="w-2 h-2 bg-gray-400 rounded-full" />
                   </div>
 
                   {/* White dots around the wheel */}
-                  {Array.from({ length: 12 }).map((_, index) => {
-                    const angle = index * 30 * (Math.PI / 180);
-                    const dotRadius = 140;
+                  {Array.from({ length: 16 }).map((_, index) => {
+                    const angle = index * 22.5 * (Math.PI / 180);
+                    const dotRadius = 170;
                     const dotX = 50 + (dotRadius / 2) * Math.cos(angle);
                     const dotY = 50 + (dotRadius / 2) * Math.sin(angle);
 
@@ -235,40 +235,66 @@ const SpinWheel = ({ onNavigateToTask }: SpinWheelProps) => {
             </div>
           </div>
 
-          <p className="text-gray-600 mb-6 text-center font-medium">
+          {/* Description Text */}
+          <p className="text-gray-600 mb-8 text-center font-medium text-lg">
             Spin Wheel to pick your task
           </p>
+
+          {/* Action Buttons - Centered below wheel */}
+          <div className="flex gap-4 justify-center">
+            <Button
+              className="bg-primary text-white px-8 py-3 rounded-lg font-medium text-base"
+              color="primary"
+              isLoading={isSpinning}
+              size="lg"
+              startContent={!isSpinning ? <RotateCcw size={18} /> : null}
+              onPress={handleSpin}
+            >
+              {isSpinning ? "Spinning..." : "Spin"}
+            </Button>
+
+            {spinResult && !isSpinning && (
+              <Button
+                className="bg-green-500 text-white px-8 py-3 rounded-lg font-medium hover:bg-green-600 transition-colors text-base"
+                size="lg"
+                startContent={<ArrowRight size={18} />}
+                onPress={handleGoToTask}
+              >
+                Go To Task
+              </Button>
+            )}
+          </div>
         </div>
 
-        {/* Category Selection */}
+        {/* Right Side - Category Selection (Non-functional) */}
         <div className="flex-1 max-w-sm">
-          <Card className="shadow-lg">
+          <Card className="shadow-lg h-fit">
             <CardBody className="p-6">
               <h4 className="font-semibold mb-4 text-lg">
                 Select Task Category
               </h4>
               <Select
-              aria-label="Select category"
+                
+                aria-label="Select category"
                 placeholder="Select category"
-                selectedKeys={[selectedCategory]}
+                selectedKeys={["all"]}
+                size="md"
                 variant="bordered"
-                onSelectionChange={(keys) =>
-                  setSelectedCategory(Array.from(keys)[0] as string)
-                }
               >
-                {[
-                  <SelectItem key="all">All Categories</SelectItem>,
-                  ...categories.map((category) => (
-                    <SelectItem key={category.key}>{category.label}</SelectItem>
-                  )),
-                ]}
+                {/* <SelectItem key="all">All Categories</SelectItem> */}
+                {categoryOptions.map((category) => (
+                  <SelectItem key={category.key}>
+                    {category.label}
+                  </SelectItem>
+                ))}
               </Select>
 
+              {/* Static Category List */}
               <div className="mt-6 space-y-3">
                 <h5 className="font-medium text-sm text-gray-700">
                   Available Categories:
                 </h5>
-                {filteredCategories.map((category) => (
+                {categories.map((category) => (
                   <div key={category.key} className="flex items-center gap-3">
                     <div
                       className="w-4 h-4 rounded-full shadow-sm"
@@ -283,31 +309,6 @@ const SpinWheel = ({ onNavigateToTask }: SpinWheelProps) => {
             </CardBody>
           </Card>
         </div>
-      </div>
-
-      {/* Action Buttons */}
-      <div className="flex gap-4 justify-center">
-        <Button
-          className="bg-primary text-white px-8 py-2 rounded-lg font-medium"
-          color="primary"
-          isLoading={isSpinning}
-          size="lg"
-          startContent={!isSpinning ? <RotateCcw size={18} /> : null}
-          onPress={handleSpin}
-        >
-          {isSpinning ? "Spinning..." : "Spin 🎯"}
-        </Button>
-
-        {spinResult && !isSpinning && (
-          <Button
-            className="bg-green-500 text-white px-8 py-2 rounded-lg font-medium hover:bg-green-600 transition-colors"
-            size="lg"
-            startContent={<ArrowRight size={18} />}
-            onPress={handleGoToTask}
-          >
-            Go To Task
-          </Button>
-        )}
       </div>
     </div>
   );
