@@ -8,12 +8,6 @@ exports.verifyToken = exports.createToken = void 0;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const AppError_1 = __importDefault(require("../errors/AppError"));
-// _id: user._id,
-//     name: user.name,
-//     email: user.email,
-//     mobileNumber: user.mobileNumber,
-//     role: user.role,
-//     status: user.status,
 const createToken = (jwtPayload, secret, expiresIn) => {
     return jsonwebtoken_1.default.sign(jwtPayload, secret, {
         expiresIn,

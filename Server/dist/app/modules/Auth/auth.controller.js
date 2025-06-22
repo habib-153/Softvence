@@ -81,10 +81,22 @@ const resetPassword = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 
         data: result,
     });
 }));
+const forgotPassword = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const userEmail = (_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.email;
+    const result = yield auth_service_1.AuthServices.forgetPassword(userEmail);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: 'Reset link is generated successfully!',
+        data: result,
+    });
+}));
 exports.AuthControllers = {
     registerUser,
     loginUser,
     changePassword,
     refreshToken,
     resetPassword,
+    forgotPassword,
 };

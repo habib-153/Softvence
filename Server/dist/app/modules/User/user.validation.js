@@ -20,7 +20,6 @@ const createUserValidationSchema = zod_1.z.object({
             required_error: 'Password is required',
         }),
         status: zod_1.z.nativeEnum(user_constant_1.USER_STATUS).default(user_constant_1.USER_STATUS.ACTIVE),
-        mobileNumber: zod_1.z.string().optional(),
     }),
 });
 const updateUserValidationSchema = zod_1.z.object({
@@ -30,7 +29,6 @@ const updateUserValidationSchema = zod_1.z.object({
         email: zod_1.z.string().email().optional(),
         password: zod_1.z.string().optional(),
         status: zod_1.z.nativeEnum(user_constant_1.USER_STATUS).optional(),
-        mobileNumber: zod_1.z.string().optional(),
     }),
 });
 exports.UserValidation = {

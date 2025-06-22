@@ -33,7 +33,6 @@ const seed = () => __awaiter(void 0, void 0, void 0, function* () {
                 email: config_1.default.admin_email,
                 password: config_1.default.admin_password,
                 profilePhoto: config_1.default.admin_profile_photo,
-                mobileNumber: config_1.default.admin_mobile_number,
                 status: user_constant_1.USER_STATUS.ACTIVE,
             });
             console.log('Admin created successfully...');

@@ -38,5 +38,6 @@ router.post('/register', (0, validateRequest_1.default)(auth_validation_1.AuthVa
 router.post('/login', (0, validateRequest_1.default)(auth_validation_1.AuthValidation.loginValidationSchema), auth_controller_1.AuthControllers.loginUser);
 router.post('/change-password', (0, auth_1.default)(user_constant_1.USER_ROLE.USER, user_constant_1.USER_ROLE.ADMIN), (0, validateRequest_1.default)(auth_validation_1.AuthValidation.changePasswordValidationSchema), auth_controller_1.AuthControllers.changePassword);
 router.post('/reset-password', auth_controller_1.AuthControllers.resetPassword);
+router.post('/forgot-password', auth_controller_1.AuthControllers.forgotPassword);
 router.post('/refresh-token', (0, validateRequest_1.validateRequestCookies)(auth_validation_1.AuthValidation.refreshTokenValidationSchema), auth_controller_1.AuthControllers.refreshToken);
 exports.AuthRoutes = router;

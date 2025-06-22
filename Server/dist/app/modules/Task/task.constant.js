@@ -9,5 +9,6 @@ exports.CATEGORIES = [
     'sport',
     'meditation',
     'friends',
+    'other'
 ];
 exports.postSearchableFields = ['title', 'category'];

@@ -50,10 +50,6 @@ const userSchema = new mongoose_1.Schema({
     passwordChangedAt: {
         type: Date,
     },
-    mobileNumber: {
-        type: String,
-        required: true,
-    },
     profilePhoto: {
         type: String,
         default: null

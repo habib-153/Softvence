@@ -21,6 +21,7 @@ const AppError_1 = __importDefault(require("../../errors/AppError"));
 const verifyJWT_1 = require("../../utils/verifyJWT");
 const user_constant_1 = require("../User/user.constant");
 const user_model_1 = require("../User/user.model");
+const emailSender_1 = require("../../utils/emailSender");
 const registerUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     // checking if the user is exist
     const user = yield user_model_1.User.isUserExistsByEmail(payload === null || payload === void 0 ? void 0 : payload.email);
@@ -28,6 +29,7 @@ const registerUser = (payload) => __awaiter(void 0, void 0, void 0, function* ()
         throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'This user is already exist!');
     }
     payload.role = user_constant_1.USER_ROLE.USER;
+    payload.status = user_constant_1.USER_STATUS.ACTIVE;
     //create new user
     const newUser = yield user_model_1.User.create(payload);
     //create token and sent to the  client
@@ -35,7 +37,6 @@ const registerUser = (payload) => __awaiter(void 0, void 0, void 0, function* ()
         _id: newUser._id,
         name: newUser.name,
         email: newUser.email,
-        mobileNumber: newUser.mobileNumber,
         role: newUser.role,
         status: newUser.status,
     };
@@ -60,7 +61,6 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         _id: user._id,
         name: user.name,
         email: user.email,
-        mobileNumber: user.mobileNumber,
         role: user.role,
         status: user.status,
     };
@@ -109,7 +109,6 @@ const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
         _id: user._id,
         name: user.name,
         email: user.email,
-        mobileNumber: user.mobileNumber,
         role: user.role,
         status: user.status,
     };
@@ -138,10 +137,27 @@ const resetPassword = (payload, token) => __awaiter(void 0, void 0, void 0, func
     });
     return null;
 });
+const forgetPassword = (userEmail) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.User.isUserExistsByEmail(userEmail);
+    if (!user) {
+        throw new AppError_1.default(http_status_1.default.NOT_FOUND, 'User does not exist!');
+    }
+    const jwtPayload = {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        status: user.status,
+    };
+    const resetToken = (0, verifyJWT_1.createToken)(jwtPayload, config_1.default.jwt_access_secret, '20m');
+    const resetUILink = `${config_1.default.reset_pass_ui_link}?email=${user.email}&token=${resetToken} `;
+    yield emailSender_1.EmailHelper.sendEmail(user.email, resetUILink);
+});
 exports.AuthServices = {
     registerUser,
     loginUser,
     changePassword,
     refreshToken,
     resetPassword,
+    forgetPassword,
 };
